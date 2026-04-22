@@ -1,15 +1,15 @@
-# Cargo Device Share Service
+# Harbor Device Share Service
 
-Standalone Cloudflare Worker for Cargo for Syncthing device handoff links.
+Standalone Cloudflare Worker for Harbor device handoff links.
 
 It creates short share pages and JSON endpoints that let someone:
 
-- add a device to Cargo with one click
+- add a device to Harbor with one click
 - copy the raw Syncthing device ID
 - scan a QR code for the device ID
-- download the latest public Cargo build from a stable URL
+- download the latest public Harbor build from a stable URL
 
-This repo exists separately from the private Cargo app repo so Cloudflare's one-click deployment can target a public, standalone Worker repository.
+This repo exists separately from the private Harbor app repo so Cloudflare's one-click deployment can target a public, standalone Worker repository.
 
 ## Deploy to Cloudflare
 
@@ -25,14 +25,14 @@ This repo exists separately from the private Cargo app repo so Cloudflare's one-
    - `DEVICE_SHARES`
    - `APP_METADATA`
 6. Leave the default vars unless you intentionally changed the desktop app:
-   - `APP_NAME=Cargo for Syncthing`
+   - `APP_NAME=Harbor`
    - `CARGO_URL_SCHEME=cargo-syncthing`
 7. Finish the deployment.
 8. Copy the deployed Worker URL.
 
-## Connect it to Cargo
+## Connect it to Harbor
 
-1. Open Cargo.
+1. Open Harbor.
 2. Go to `Settings`.
 3. Find `Device Sharing Service`.
 4. Paste the deployed Worker URL.
@@ -51,7 +51,7 @@ The expected KV value is JSON like:
 
 ```json
 {
-  "url": "https://downloads.example.com/Cargo-for-Syncthing-latest.zip",
+  "url": "https://downloads.example.com/Harbor-latest.zip",
   "version": "0.1.0-beta.3",
   "buildLabel": "Test build",
   "publishedAt": "2026-04-22T12:00:00Z"

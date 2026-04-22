@@ -210,9 +210,9 @@ async function renderLandingPage(env: Env): Promise<string> {
   <body>
     <main class="shell">
       <section class="hero">
-        <p class="eyebrow">Cargo Device Share</p>
-        <h1>Create short Syncthing connection links from Cargo.</h1>
-        <p class="lede">Deploy this worker, point Cargo at it in Settings, and the app will generate short share pages that open directly back into Cargo and still show the raw Syncthing device ID.</p>
+        <p class="eyebrow">Harbor Device Share</p>
+        <h1>Create short Syncthing connection links from Harbor.</h1>
+        <p class="lede">Deploy this worker, point Harbor at it in Settings, and the app will generate short share pages that open directly back into Harbor and still show the raw Syncthing device ID.</p>
         ${renderDownloadPanel(downloadInfo)}
       </section>
     </main>
@@ -257,7 +257,7 @@ function renderSharePage(
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Connect ${escapeHTML(payload.deviceName)}</title>
     <meta property="og:title" content="Connect ${escapeHTML(payload.deviceName)}">
-    <meta property="og:description" content="Use this link to add ${escapeHTML(payload.deviceName)} to Cargo or any Syncthing install.">
+    <meta property="og:description" content="Use this link to add ${escapeHTML(payload.deviceName)} to Harbor or any Syncthing install.">
     <meta property="og:url" content="${escapeHTML(url.toString())}">
     <style>${baseStyles()}</style>
   </head>
@@ -266,9 +266,9 @@ function renderSharePage(
       <section class="hero">
         <p class="eyebrow">${escapeHTML(env.APP_NAME)}</p>
         <h1>Connect ${escapeHTML(payload.deviceName)}</h1>
-        <p class="lede">Open this device in Cargo with one click, or use the Syncthing device ID below in any regular Syncthing install.</p>
+        <p class="lede">Open this device in Harbor with one click, or use the Syncthing device ID below in any regular Syncthing install.</p>
         <div class="button-row">
-          <a class="button primary" href="${escapeHTML(cargoImportURL)}">Add to Cargo</a>
+          <a class="button primary" href="${escapeHTML(cargoImportURL)}">Add to Harbor</a>
           <button class="button" type="button" onclick="navigator.clipboard.writeText('${escapeJS(payload.deviceID)}')">Copy Device ID</button>
         </div>
       </section>
@@ -311,11 +311,11 @@ function renderDownloadPanel(downloadInfo: DownloadInfo | null): string {
 
   return `
       <section class="panel download-panel">
-        <p class="section-label">Need Cargo first?</p>
+        <p class="section-label">Need Harbor first?</p>
         <h2 class="download-title">Download the desktop app</h2>
         ${metaMarkup}
         <div class="button-row">
-          <a class="button primary" href="${escapeHTML(downloadInfo.url)}">Download Cargo</a>
+          <a class="button primary" href="${escapeHTML(downloadInfo.url)}">Download Harbor</a>
         </div>
       </section>
   `;
