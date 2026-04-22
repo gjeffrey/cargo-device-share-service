@@ -2,8 +2,12 @@ import QRCode from "qrcode";
 
 interface Env {
   DEVICE_SHARES: KVNamespace;
+  APP_METADATA: KVNamespace;
   APP_NAME: string;
   CARGO_URL_SCHEME: string;
+  DOWNLOAD_URL?: string;
+  DOWNLOAD_VERSION?: string;
+  DOWNLOAD_BUILD_LABEL?: string;
 }
 
 interface DeviceSharePayload {
@@ -12,6 +16,13 @@ interface DeviceSharePayload {
   deviceID: string;
   addresses: string[];
   createdAt: string;
+}
+
+interface DownloadInfo {
+  url: string;
+  version?: string;
+  buildLabel?: string;
+  publishedAt?: string;
 }
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
@@ -35,7 +46,7 @@ export default {
     }
 
     if (request.method === "GET" && url.pathname === "/") {
-      return new Response(renderLandingPage(env), {
+      return new Response(await renderLandingPage(env), {
         headers: {
           "content-type": "text/html; charset=utf-8"
         }
@@ -98,6 +109,7 @@ async function getSharePage(env: Env, url: URL, id?: string): Promise<Response> 
   }
 
   const cargoImportURL = buildCargoImportURL(env.CARGO_URL_SCHEME, payload);
+  const downloadInfo = await resolveDownloadInfo(env);
   const deviceIDQRCode = await QRCode.toString(payload.deviceID, {
     type: "svg",
     margin: 1,
@@ -108,7 +120,7 @@ async function getSharePage(env: Env, url: URL, id?: string): Promise<Response> 
     }
   });
 
-  return new Response(renderSharePage(env, url, payload, cargoImportURL, deviceIDQRCode), {
+  return new Response(renderSharePage(env, url, payload, cargoImportURL, deviceIDQRCode, downloadInfo), {
     headers: {
       "content-type": "text/html; charset=utf-8",
       "cache-control": "public, max-age=300"
@@ -168,7 +180,25 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function renderLandingPage(env: Env): string {
+async function resolveDownloadInfo(env: Env): Promise<DownloadInfo | null> {
+  const kvValue = await env.APP_METADATA.get("latest-download", "json") as DownloadInfo | null;
+  if (kvValue?.url) {
+    return kvValue;
+  }
+
+  if (env.DOWNLOAD_URL && env.DOWNLOAD_URL.trim().length > 0) {
+    return {
+      url: env.DOWNLOAD_URL.trim(),
+      version: env.DOWNLOAD_VERSION?.trim() || undefined,
+      buildLabel: env.DOWNLOAD_BUILD_LABEL?.trim() || undefined
+    };
+  }
+
+  return null;
+}
+
+async function renderLandingPage(env: Env): Promise<string> {
+  const downloadInfo = await resolveDownloadInfo(env);
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -183,6 +213,7 @@ function renderLandingPage(env: Env): string {
         <p class="eyebrow">Cargo Device Share</p>
         <h1>Create short Syncthing connection links from Cargo.</h1>
         <p class="lede">Deploy this worker, point Cargo at it in Settings, and the app will generate short share pages that open directly back into Cargo and still show the raw Syncthing device ID.</p>
+        ${renderDownloadPanel(downloadInfo)}
       </section>
     </main>
   </body>
@@ -215,7 +246,8 @@ function renderSharePage(
   url: URL,
   payload: DeviceSharePayload,
   cargoImportURL: string,
-  deviceIDQRCode: string
+  deviceIDQRCode: string,
+  downloadInfo: DownloadInfo | null
 ): string {
   const addressLines = payload.addresses.map((address) => `<li>${escapeHTML(address)}</li>`).join("");
   return `<!doctype html>
@@ -241,6 +273,8 @@ function renderSharePage(
         </div>
       </section>
 
+      ${renderDownloadPanel(downloadInfo)}
+
       <section class="grid">
         <article class="panel">
           <p class="section-label">Syncthing Device ID</p>
@@ -258,6 +292,46 @@ function renderSharePage(
     </main>
   </body>
 </html>`;
+}
+
+function renderDownloadPanel(downloadInfo: DownloadInfo | null): string {
+  if (!downloadInfo?.url) {
+    return "";
+  }
+
+  const metaParts = [
+    downloadInfo.version ? `Version ${escapeHTML(downloadInfo.version)}` : "",
+    downloadInfo.buildLabel ? escapeHTML(downloadInfo.buildLabel) : "",
+    downloadInfo.publishedAt ? escapeHTML(formatPublishedDate(downloadInfo.publishedAt)) : ""
+  ].filter(Boolean);
+
+  const metaMarkup = metaParts.length > 0
+    ? `<p class="meta">${metaParts.join(" • ")}</p>`
+    : "";
+
+  return `
+      <section class="panel download-panel">
+        <p class="section-label">Need Cargo first?</p>
+        <h2 class="download-title">Download the desktop app</h2>
+        ${metaMarkup}
+        <div class="button-row">
+          <a class="button primary" href="${escapeHTML(downloadInfo.url)}">Download Cargo</a>
+        </div>
+      </section>
+  `;
+}
+
+function formatPublishedDate(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  }).format(date);
 }
 
 function baseStyles(): string {
@@ -287,6 +361,15 @@ function baseStyles(): string {
       padding: 0 0 32px;
       border-bottom: 1px solid var(--line);
       margin-bottom: 28px;
+    }
+    .download-panel {
+      margin-top: 26px;
+    }
+    .download-title {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
     }
     .eyebrow, .section-label {
       margin: 0 0 10px;

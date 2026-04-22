@@ -6,10 +6,16 @@
   "kv_namespaces": [
     {
       "binding": "DEVICE_SHARES"
+    },
+    {
+      "binding": "APP_METADATA"
     }
   ],
   "vars": {
     "APP_NAME": "Cargo for Syncthing",
-    "CARGO_URL_SCHEME": "cargo-syncthing"
+    "CARGO_URL_SCHEME": "cargo-syncthing",
+    "DOWNLOAD_URL": "",
+    "DOWNLOAD_VERSION": "",
+    "DOWNLOAD_BUILD_LABEL": ""
   }
 }

@@ -8,11 +8,23 @@
       "DEVICE_SHARES": {
         "description": "KV namespace used to store short-lived Cargo device handoff records."
       },
+      "APP_METADATA": {
+        "description": "KV namespace for published download metadata such as the latest public Cargo build URL and version."
+      },
       "APP_NAME": {
         "description": "Public name shown on the share pages. The default is Cargo for Syncthing."
       },
       "CARGO_URL_SCHEME": {
         "description": "Custom URL scheme for the desktop app deep link. Keep cargo-syncthing unless you changed the app."
+      },
+      "DOWNLOAD_URL": {
+        "description": "Optional fallback public download URL for Cargo when the APP_METADATA KV key latest-download has not been set yet."
+      },
+      "DOWNLOAD_VERSION": {
+        "description": "Optional fallback version label shown next to the download button."
+      },
+      "DOWNLOAD_BUILD_LABEL": {
+        "description": "Optional fallback build label or channel text shown next to the download button."
       }
     }
   },
