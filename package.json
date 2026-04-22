@@ -1,0 +1,33 @@
+{
+  "name": "cargo-device-share-service",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "cloudflare": {
+    "bindings": {
+      "DEVICE_SHARES": {
+        "description": "KV namespace used to store short-lived Cargo device handoff records."
+      },
+      "APP_NAME": {
+        "description": "Public name shown on the share pages. The default is Cargo for Syncthing."
+      },
+      "CARGO_URL_SCHEME": {
+        "description": "Custom URL scheme for the desktop app deep link. Keep cargo-syncthing unless you changed the app."
+      }
+    }
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "typegen": "wrangler types"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.64.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cargo-device-share",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-04-21",
+  "kv_namespaces": [
+    {
+      "binding": "DEVICE_SHARES"
+    }
+  ],
+  "vars": {
+    "APP_NAME": "Cargo for Syncthing",
+    "CARGO_URL_SCHEME": "cargo-syncthing"
+  }
+}
