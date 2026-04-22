@@ -208,6 +208,7 @@ async function renderLandingPage(env: Env): Promise<string> {
     <style>${baseStyles()}</style>
   </head>
   <body>
+    <!-- harbor-device-share deploy probe 2026-04-22 -->
     <main class="shell">
       <section class="hero">
         <p class="eyebrow">Harbor Device Share</p>
@@ -230,6 +231,7 @@ function renderMissingPage(env: Env): string {
     <style>${baseStyles()}</style>
   </head>
   <body>
+    <!-- harbor-device-share deploy probe 2026-04-22 -->
     <main class="shell">
       <section class="panel">
         <p class="eyebrow">${escapeHTML(env.APP_NAME)}</p>
