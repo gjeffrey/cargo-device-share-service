@@ -6,25 +6,37 @@
   "cloudflare": {
     "bindings": {
       "DEVICE_SHARES": {
-        "description": "KV namespace used to store short-lived Harbor device handoff records."
+        "description": "KV namespace used to store short-lived platform10 device handoff records."
       },
       "APP_METADATA": {
-        "description": "KV namespace for published download metadata such as the latest public Harbor build URL and version."
+        "description": "KV namespace for published download metadata such as the latest public platform10 build URL and version."
       },
       "APP_NAME": {
-        "description": "Public name shown on the share pages. The default is Harbor."
+        "description": "Public name shown on the share pages. The default is platform10."
       },
-      "CARGO_URL_SCHEME": {
-        "description": "Custom URL scheme for the desktop app deep link. Keep cargo-syncthing unless you changed the app."
+      "APP_URL_SCHEME": {
+        "description": "Custom URL scheme for the platform10 deep link. The default is platform10."
       },
       "DOWNLOAD_URL": {
-        "description": "Optional fallback public download URL for Harbor when the APP_METADATA KV key latest-download has not been set yet."
+        "description": "Optional fallback public download URL for platform10 when the APP_METADATA KV key latest-download has not been set yet."
       },
       "DOWNLOAD_VERSION": {
         "description": "Optional fallback version label shown next to the download button."
       },
       "DOWNLOAD_BUILD_LABEL": {
         "description": "Optional fallback build label or channel text shown next to the download button."
+      },
+      "TUNNEL_BASE_DOMAIN": {
+        "description": "Base hostname used for platform10 Share public tunnels, for example share.platform10.uk."
+      },
+      "CF_ACCOUNT_ID": {
+        "description": "Cloudflare account ID used by the tunnel broker API."
+      },
+      "CF_ZONE_ID": {
+        "description": "Cloudflare DNS zone ID used to create public tunnel hostnames."
+      },
+      "CF_API_TOKEN": {
+        "description": "Secret Cloudflare API token with permission to manage Cloudflare Tunnel and DNS records."
       }
     }
   },

@@ -12,10 +12,13 @@
     }
   ],
   "vars": {
-    "APP_NAME": "Harbor",
-    "CARGO_URL_SCHEME": "cargo-syncthing",
+    "APP_NAME": "platform10",
+    "APP_URL_SCHEME": "platform10",
     "DOWNLOAD_URL": "",
     "DOWNLOAD_VERSION": "",
-    "DOWNLOAD_BUILD_LABEL": ""
+    "DOWNLOAD_BUILD_LABEL": "",
+    "TUNNEL_BASE_DOMAIN": "share.platform10.uk",
+    "CF_ACCOUNT_ID": "",
+    "CF_ZONE_ID": ""
   }
 }
